@@ -5,6 +5,7 @@ This extension enables the easy and quick production of two frequently used 3D S
 <br>
 Usage: 
 <br>
+<br>
 Start 3D Slicer (1) and load a lung CT volume.
 Start the "Lung Mask Generator" extension (what you see here, hopefully in "Chest Imaging Platform" soon).   
 Select the appropriate volume from the input drop down menu. 
@@ -16,6 +17,7 @@ Please check the boundaries.
 <br>
 <br>
 Details
+<br>
 <br>
 The script uses Slicer´s excellent "Segment Editor".
 First step is a threshold segmentation, which is then trimmed by "Surface Cuts" around the markers and a vertical lung mask division. 
