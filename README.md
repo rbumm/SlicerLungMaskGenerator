@@ -1,6 +1,7 @@
 # 3D Slicer Lung Mask Generator
 <br>
-This extension enables the easy and quick production of two frequently used 3D Slicer masks from lung CT scans: "Right lung mask" and "Left lung mask".
+This extension enables the easy and quick production of two frequently used masks from lung CT scans: A "Right Lung Mask" and a "Left Lung Mask".
+This procedure is realized (semiautomatically) with 3D Slicer (1). 
 <br>
 <br>
 Usage: 
