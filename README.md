@@ -6,13 +6,15 @@ This extension enables the easy and quick production of two frequently used 3D S
 Usage: 
 <br>
 <br>
-Start 3D Slicer (1) and load a lung CT volume.
-Start the "Lung Mask Generator" extension (what you see here, hopefully in "Chest Imaging Platform" soon).   
-Select the appropriate volume from the input drop down menu. 
-Define four simple markers by using the predefined marker widgets fro the UI: 
-Place one somewhere on the right lung, one on the left lung, one in the middle of the upper trachea above the thoracic aperture, the last one in the area of the tracheal bifurcation, orientated to the left main bronchus. 
-Press "Apply". 
-After some seconds, you should have a fairly exact right and left lung mask segmentation. 
+<ul>
+<li>Start 3D Slicer (1) and load a lung CT volume.</li>
+<li>Start the "Lung Mask Generator" extension (what you see here, in "Chest Imaging Platform").</li>
+<li>Select the appropriate volume from the input drop down menu. </li>
+<li>Define four simple markers by using the predefined marker widgets from the UI:
+Place one somewhere on the right lung, one on the left lung, one in the middle of the upper trachea above the thoracic aperture, the last one in the area of the tracheal bifurcation, orientated to the left main bronchus. </li>
+<li>Press "Apply". </li>
+</ul>
+<br>After some seconds, you should have a fairly exact right and left lung mask segmentation. 
 Please check the boundaries. 
 <br>
 <br>
