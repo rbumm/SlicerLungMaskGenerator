@@ -2,6 +2,7 @@
 <br>
 This extension enables the easy production of two frequently used 3D Slicer (1) masks from lung CT scans: "Right lung mask" and "Left lung mask".
 <br>
+<br>
 Usage: 
 <br>
 Start 3D Slicer and load a lung CT volume.
@@ -13,6 +14,7 @@ Press "Apply".
 After some seconds, you should have a fairly exact right and left lung mask segmentation. 
 Please check the boundaries and manually trim if you are not satisfied. 
 <br>
+<br>
 Details
 <br>
 The script uses Slicer´s excellent "Segment Editor".
@@ -20,7 +22,9 @@ First step is a threshold segmentation, which is then trimmed by "Surface Cuts" 
 Right and left lung mask are isolated by calling the "Islands" function and a "Keep selected island", much the same way you would do it by hand within SLicer. 
 Final touches are done to both masks by applying the "Smoothing" function with a kernel size of 5 (to close most vessel, infiltration and bronchus holes).  
 <br>
+<br>
 (1) https://www.slicer.org/
+<br>
 <br>
 Idea and realization:<br>
 Prof. Rudolf Bumm<br>
@@ -28,9 +32,11 @@ Department of Surgery<br>
 Kantonsspital Graubünden<br>
 Chur, Switzerland<br>
 <br>
+<br>
 (c) 2020 by R. Bumm, Munich / Chur.<br>
 All rights reserved. <br>
 The code presented here is distributed under the Apache license (https://www.apache.org/licenses/LICENSE-2.0).<br>
+<br>
 <br>
 Development and marketing: c/o Scientific-Networks Munich<br>
 info@scientific-networks.com<br>
