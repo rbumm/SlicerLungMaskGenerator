@@ -23,6 +23,9 @@ Right and left lung mask are isolated by calling the "Islands" function and a "K
 Final touches are done to both masks by applying the "Smoothing" function with a kernel size of 5 (to close most vessel, infiltration and bronchus holes).  
 <br>
 <br>
+This extension is ideally suited to prepare the masks for the CT Lung Analyzer (https://github.com/rbumm/SlicerCTLungAnalyzer) of the same author.   
+<br>
+
 (1) https://www.slicer.org/
 <br>
 <br>
@@ -36,7 +39,6 @@ Chur, Switzerland<br>
 (c) 2020 by R. Bumm, Munich / Chur.<br>
 All rights reserved. <br>
 The code presented here is distributed under the Apache license (https://www.apache.org/licenses/LICENSE-2.0).<br>
-<br>
 <br>
 Development and marketing: c/o Scientific-Networks Munich<br>
 info@scientific-networks.com<br>
