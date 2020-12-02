@@ -19,7 +19,7 @@ Details
 <br>
 The script uses Slicer´s excellent "Segment Editor".
 First step is a threshold segmentation, which is then trimmed by "Surface Cuts" around the markers and a vertical lung mask division. 
-Right and left lung mask are isolated by calling the "Islands" function and a "Keep selected island", much the same way you would do it by hand within SLicer. 
+Right and left lung mask are isolated by calling the "Islands" function and a "Keep selected island", much the same way you would do it by hand. 
 Final touches are done to both masks by applying the "Smoothing" function with a kernel size of 5 (to close most vessel, infiltration and bronchus holes). Development and testing with Slicer 4.11.20200930.
 <br>
 <br>
