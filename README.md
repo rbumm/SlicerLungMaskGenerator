@@ -29,7 +29,7 @@ Final touches are done to both masks by applying the "Smoothing" function with a
 <br>
 This extension is ideally suited to prepare the masks for the CT Lung Analyzer (https://github.com/rbumm/SlicerCTLungAnalyzer) of the same author.   
 <br>
-
+<br>
 (1) https://www.slicer.org/
 <br>
 <br>
