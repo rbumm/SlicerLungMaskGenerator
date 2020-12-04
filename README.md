@@ -38,14 +38,9 @@ This extension is ideally suited to prepare the masks for the CT Lung Analyzer (
 <br>
 <br>
 Idea and realization:<br>
-Prof. Rudolf Bumm<br>
-Department of Surgery<br>
-Kantonsspital Graubünden<br>
-Chur, Switzerland<br>
+Rudolf Bumm, Department of Surgery, Kantonsspital Graubünden (KSGR), Chur, Switzerland.<br>
 <br>
 <br>
-(c) 2020 by R. Bumm, Munich / Chur.<br>
-All rights reserved. <br>
 The code presented here is distributed under the Apache license (https://www.apache.org/licenses/LICENSE-2.0).<br>
 <br>
 Development and marketing: c/o Scientific-Networks Munich<br>
