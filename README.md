@@ -16,8 +16,9 @@ Place one somewhere on the right lung, one on the left lung, one in the middle o
 <li>Press "Apply". </li>
 </ul>
 <br>After 20 seconds you should have a fairly exact right and left lung mask segmentation. 
-Always check the boundaries. 
-Reference video: https://www.youtube.com/watch?v=DZ4T_0nONvo
+Always check the boundaries. <br>
+<br>
+Video: https://www.youtube.com/watch?v=DZ4T_0nONvo
 
 <br>
 <br>
