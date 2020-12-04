@@ -45,6 +45,4 @@ Rudolf Bumm, Department of Surgery, Kantonsspital Graubünden (KSGR), Chur, Swit
 <br>
 The code presented here is distributed under the Apache license (https://www.apache.org/licenses/LICENSE-2.0).<br>
 <br>
-Development and marketing: c/o Scientific-Networks Munich<br>
-info@scientific-networks.com<br>
 
