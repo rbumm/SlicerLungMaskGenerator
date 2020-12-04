@@ -15,8 +15,10 @@ Usage:
 Place one somewhere on the right lung, one on the left lung, one in the middle of the upper trachea above the thoracic aperture, the last one in the area of the tracheal bifurcation, orientated to the left main bronchus. </li>
 <li>Press "Apply". </li>
 </ul>
-<br>After some seconds, you should have a fairly exact right and left lung mask segmentation. 
+<br>After 20 seconds you should have a fairly exact right and left lung mask segmentation. 
 Always check the boundaries. 
+Reference video: https://www.youtube.com/watch?v=DZ4T_0nONvo
+
 <br>
 <br>
 Details
