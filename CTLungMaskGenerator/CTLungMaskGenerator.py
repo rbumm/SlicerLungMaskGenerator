@@ -187,7 +187,7 @@ class CTLungMaskGeneratorWidget(ScriptedLoadableModuleWidget, VTKObservationMixi
 
     # Temporary markups node
 
-    if self.ui.cb_keepMarkers.enabled == True: 
+    if self.ui.cb_keepMarkers.checked == True: 
         # do not initialize nodes
         logging.info('Markers not touched.')
     else: 
@@ -368,7 +368,7 @@ class CTLungMaskGeneratorWidget(ScriptedLoadableModuleWidget, VTKObservationMixi
     try:
 
       # Compute output
-      self.logic.process(self.ui.inputSelector.currentNode(), self.ui.ThresholdRangeWidget.minimumValue,self.ui.ThresholdRangeWidget.maximumValue,self.ui.cb_show3D.enabled)
+      self.logic.process(self.ui.inputSelector.currentNode(), self.ui.ThresholdRangeWidget.minimumValue,self.ui.ThresholdRangeWidget.maximumValue,self.ui.cb_show3D.checked)
       # enable checkbox keep Markers if user wants to do the algo again
       self.ui.cb_keepMarkers.enabled = True; 
     except Exception as e:
