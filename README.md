@@ -40,7 +40,7 @@ This extension is suited to prepare the masks for the CT Lung Analyzer (https://
 Idea and realization:<br>
 <br>
 Rudolf Bumm, Department of Surgery, Kantonsspital Graubünden (KSGR), Chur, Switzerland. <br>
-<a href="mailto:rudolf.bumm@ksgr.ch">Email</a>  <br>
+<br>
 <br>
 Conceptual changes: Andras Lasso (PERK)
 <br>
