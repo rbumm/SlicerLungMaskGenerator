@@ -1,6 +1,6 @@
 # 3D Slicer Lung Mask Generator
 <br>
-This extension enables the easy and quick production of two frequently used masks from lung CT scans: A "Right Lung Mask" and a "Left Lung Mask".
+This extension enables the easy and quick production of three frequently used masks from lung CT scans: A "Right Lung Mask", a "Left Lung Mask" and a "Trachea mask".
 This procedure is realized (semiautomatically) with 3D Slicer (1). 
 <br>
 <br>
@@ -11,11 +11,13 @@ Usage:
 <li>Start 3D Slicer (1) and load a lung CT volume.</li>
 <li>Start the "Lung Mask Generator" extension (what you see here, in "Chest Imaging Platform").</li>
 <li>Select the appropriate volume from the input drop down menu. </li>
-<li>Define four simple markers by using the predefined marker widgets from the UI:
-Place one somewhere on the right lung, one on the left lung, one in the middle of the upper trachea above the thoracic aperture, the last one in the area of the tracheal bifurcation, orientated to the left main bronchus. </li>
+<li>Define multiple markers by using the predefined marker widgets from the UI:
+Place tem somewhere on the right lung, on the left lung, one in the middle of the trachea. </li>
 <li>Press "Apply". </li>
+<li>Check the masks, place additional markers if neede, press "Apply" again.</li>
+  
 </ul>
-<br>After 20 seconds you should have a fairly exact right and left lung mask segmentation. 
+<br>After some seconds you should have fairly exact right and left lung masks. 
 Always check the boundaries. <br>
 <br>
 Overview video: https://www.youtube.com/watch?v=DZ4T_0nONvo
@@ -26,12 +28,10 @@ Details
 <br>
 <br>
 The script uses Slicer´s excellent "Segment Editor".
-First step is a threshold segmentation, which is then trimmed by "Surface Cuts" around the markers and a vertical lung mask division. 
-Right and left lung mask are isolated by calling the "Islands" function and a "Keep selected island", much the same way you would do it by hand. 
-Final touches are done to both masks by automatically applying the "Smoothing" function with a kernel size of 5 (to close most vessel, infiltration and bronchus holes). Developed and tested with Slicer 4.11.20200930.
+Developed and tested with Slicer 4.11.20200930.
 <br>
 <br>
-This extension is ideally suited to prepare the masks for the CT Lung Analyzer (https://github.com/rbumm/SlicerCTLungAnalyzer) of the same author.   
+This extension is suited to prepare the masks for the CT Lung Analyzer (https://github.com/rbumm/SlicerCTLungAnalyzer) of the same author.   
 <br>
 <br>
 (1) https://www.slicer.org/
