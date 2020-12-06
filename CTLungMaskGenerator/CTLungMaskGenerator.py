@@ -107,11 +107,11 @@ class CTLungMaskGeneratorWidget(ScriptedLoadableModuleWidget, VTKObservationMixi
     self.ui.markerRightLung.connect("currentNodeChanged(vtkMRMLNode*)", self.updateParameterNodeFromGUI)
     self.ui.markerLeftLung.connect("currentNodeChanged(vtkMRMLNode*)", self.updateParameterNodeFromGUI)
     self.ui.markerTrachea.connect("currentNodeChanged(vtkMRMLNode*)", self.updateParameterNodeFromGUI)
-    self.ui.markerBifurcation.connect("currentNodeChanged(vtkMRMLNode*)", self.updateParameterNodeFromGUI)
 
     # Buttons
     self.ui.applyButton.connect('clicked(bool)', self.onApplyButton)
     self.ui.resetButton.connect('clicked(bool)', self.onResetButton)
+    self.ui.toggleSegmentsButton.connect('clicked(bool)', self.ontoggleSegmentsButton)
 
 
     logging.info('Delete clutter segments ....')
@@ -191,7 +191,7 @@ class CTLungMaskGeneratorWidget(ScriptedLoadableModuleWidget, VTKObservationMixi
         # do not initialize nodes
         logging.info('Markers not touched.')
     else: 
-        logging.info('Delete clutter markers ....')
+        logging.info('Delete temporary markers ....')
         allSegmentNodes = slicer.util.getNodes('vtkMRMLMarkupsFiducialNode*').values()
         for ctn in allSegmentNodes:
           #logging.info('Name:>' + ctn.GetName()+'<')
@@ -201,66 +201,45 @@ class CTLungMaskGeneratorWidget(ScriptedLoadableModuleWidget, VTKObservationMixi
             slicer.mrmlScene.RemoveNode(ctn)
                 #break        
         def placementModeRightLungChanged(active):
-          print("Placement: " +("active" if active else "inactive"))
-          if not active: 
-              self.ui.markerRightLung.enabled = False; 
-              self._rightlungdefined = True
-              # Update buttons states and tooltips
-              if self._parameterNode.GetNodeReference("InputVolume") and self._rightlungdefined and self._leftlungdefined and self._tracheadefined and self._bifurcationdefined:
-                self.ui.applyButton.toolTip = "Compute output volume"
-                self.ui.applyButton.enabled = True
-              else:
-                self.ui.applyButton.toolTip = "Select input volume node and all four region markers"
-                self.ui.applyButton.enabled = False
-
+          # Update buttons states and tooltips
+          self._rightlungdefined = True
+          if self._parameterNode.GetNodeReference("InputVolume") and self._rightlungdefined and self._leftlungdefined and self._tracheadefined:
+            self.ui.applyButton.toolTip = "Compute output volume"
+            self.ui.applyButton.enabled = True
+          else:
+            self.ui.applyButton.toolTip = "Select input volume node and all four region markers"
+            self.ui.applyButton.enabled = False
           # You can inspect what is in the markups node here, delete the temporary markup node, etc.
         def placementModeLeftLungChanged(active):
           print("Placement: " +("active" if active else "inactive"))
-          if not active: 
-              self.ui.markerLeftLung.enabled = False; 
-              self._leftlungdefined = True
-              # Update buttons states and tooltips
-              if self._parameterNode.GetNodeReference("InputVolume") and self._rightlungdefined and self._leftlungdefined and self._tracheadefined and self._bifurcationdefined:
-                self.ui.applyButton.toolTip = "Compute output volume"
-                self.ui.applyButton.enabled = True
-              else:
-                self.ui.applyButton.toolTip = "Select input volume node and all four region markers"
-                self.ui.applyButton.enabled = False
+          self._leftlungdefined = True
+          # Update buttons states and tooltips
+          if self._parameterNode.GetNodeReference("InputVolume") and self._rightlungdefined and self._leftlungdefined and self._tracheadefined:
+            self.ui.applyButton.toolTip = "Compute output volume"
+            self.ui.applyButton.enabled = True
+          else:
+            self.ui.applyButton.toolTip = "Select input volume node and all four region markers"
+            self.ui.applyButton.enabled = False
           # You can inspect what is in the markups node here, delete the temporary markup node, etc.
         def placementModeTracheaChanged(active):
           print("Placement: " +("active" if active else "inactive"))
-          if not active: 
-              self.ui.markerTrachea.enabled = False; 
-              self._tracheadefined = True
-              # Update buttons states and tooltips
-              if self._parameterNode.GetNodeReference("InputVolume") and self._rightlungdefined and self._leftlungdefined and self._tracheadefined and self._bifurcationdefined:
-                self.ui.applyButton.toolTip = "Compute output volume"
-                self.ui.applyButton.enabled = True
-              else:
-                self.ui.applyButton.toolTip = "Select input volume node and all four region markers"
-                self.ui.applyButton.enabled = False
-          # You can inspect what is in the markups node here, delete the temporary markup node, etc.
-        def placementModeBifurcationChanged(active):
-          print("Placement: " +("active" if active else "inactive"))
-          if not active: 
-              self.ui.markerBifurcation.enabled = False; 
-              self._bifurcationdefined = True
-              # Update buttons states and tooltips
-              if self._parameterNode.GetNodeReference("InputVolume") and self._rightlungdefined and self._leftlungdefined and self._tracheadefined and self._bifurcationdefined:
-                self.ui.applyButton.toolTip = "Compute output volume"
-                self.ui.applyButton.enabled = True
-              else:
-                self.ui.applyButton.toolTip = "Select input volume node and all four region markers"
-                self.ui.applyButton.enabled = False
+          # Update buttons states and tooltips
+          self._tracheadefined = True
+          if self._parameterNode.GetNodeReference("InputVolume") and self._rightlungdefined and self._leftlungdefined and self._tracheadefined:
+            self.ui.applyButton.toolTip = "Compute output volume"
+            self.ui.applyButton.enabled = True
+          else:
+            self.ui.applyButton.toolTip = "Select input volume node and all four region markers"
+            self.ui.applyButton.enabled = False
           # You can inspect what is in the markups node here, delete the temporary markup node, etc.
 
         self.ui.markerRightLung.enabled = True; 
         self.ui.markerLeftLung.enabled = True; 
         self.ui.markerTrachea.enabled = True; 
-        self.ui.markerBifurcation.enabled = True; 
+        self.ui.cb_keepMarkers.enabled = True; 
         # Create and set up widget that contains a single "place markup" button. The widget can be placed in the module GUI.
         markupsRightLungNode = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLMarkupsFiducialNode")
-        markupsRightLungNode.SetName("_markerRightLung")
+        markupsRightLungNode.SetName("_markerRL")
         placeWidget = slicer.qSlicerMarkupsPlaceWidget()
         placeWidget = self.ui.markerRightLung
         placeWidget.setMRMLScene(slicer.mrmlScene)
@@ -272,7 +251,7 @@ class CTLungMaskGeneratorWidget(ScriptedLoadableModuleWidget, VTKObservationMixi
 
         # Create and set up widget that contains a single "place markup" button. The widget can be placed in the module GUI.
         markupsLeftLungNode = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLMarkupsFiducialNode")
-        markupsLeftLungNode.SetName("_markerLeftLung")
+        markupsLeftLungNode.SetName("_markerLL")
         placeWidget = slicer.qSlicerMarkupsPlaceWidget()
         placeWidget = self.ui.markerLeftLung
         placeWidget.setMRMLScene(slicer.mrmlScene)
@@ -284,7 +263,7 @@ class CTLungMaskGeneratorWidget(ScriptedLoadableModuleWidget, VTKObservationMixi
 
         # Create and set up widget that contains a single "place markup" button. The widget can be placed in the module GUI.
         markupsTracheaNode = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLMarkupsFiducialNode")
-        markupsTracheaNode.SetName("_markerUpperTrachea")
+        markupsTracheaNode.SetName("_markerT")
         placeWidget = slicer.qSlicerMarkupsPlaceWidget()
         placeWidget = self.ui.markerTrachea
         placeWidget.setMRMLScene(slicer.mrmlScene)
@@ -294,17 +273,6 @@ class CTLungMaskGeneratorWidget(ScriptedLoadableModuleWidget, VTKObservationMixi
         placeWidget.connect('activeMarkupsFiducialPlaceModeChanged(bool)', placementModeTracheaChanged)
         #placeWidget.show()
 
-        # Create and set up widget that contains a single "place markup" button. The widget can be placed in the module GUI.
-        markupsBifurcationNode = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLMarkupsFiducialNode")
-        markupsBifurcationNode.SetName("_markerBifurcation")
-        placeWidget = slicer.qSlicerMarkupsPlaceWidget()
-        placeWidget = self.ui.markerBifurcation
-        placeWidget.setMRMLScene(slicer.mrmlScene)
-        placeWidget.setCurrentNode(markupsBifurcationNode)
-        placeWidget.buttonsVisible=False
-        placeWidget.placeButton().show()
-        placeWidget.connect('activeMarkupsFiducialPlaceModeChanged(bool)', placementModeBifurcationChanged)
-        #placeWidget.show()
 
 
   def setParameterNode(self, inputParameterNode):
@@ -361,6 +329,19 @@ class CTLungMaskGeneratorWidget(ScriptedLoadableModuleWidget, VTKObservationMixi
   
     self._parameterNode.EndModify(wasModified)
 
+  def ontoggleSegmentsButton(self):
+    """
+    Toggle segments button.
+    """
+    segmentationNode = slicer.util.getNode('MaskSegmentation')
+    segmentationDisplayNode = segmentationNode.GetDisplayNode()
+    if segmentationDisplayNode.GetVisibility2D():
+        logging.info('Segments visibility off')
+        segmentationDisplayNode.Visibility2DOff()
+    else :
+        logging.info('Segments visibility on')
+        segmentationDisplayNode.Visibility2DOn()
+  
   def onApplyButton(self):
     """
     Run processing when user clicks "Apply" button.
@@ -368,7 +349,7 @@ class CTLungMaskGeneratorWidget(ScriptedLoadableModuleWidget, VTKObservationMixi
     try:
 
       # Compute output
-      self.logic.process(self.ui.inputSelector.currentNode(), self.ui.ThresholdRangeWidget.minimumValue,self.ui.ThresholdRangeWidget.maximumValue,self.ui.cb_show3D.checked)
+      self.logic.process(self.ui.inputSelector.currentNode(), self.ui.ThresholdRangeWidget.minimumValue,self.ui.ThresholdRangeWidget.maximumValue)
       # enable checkbox keep Markers if user wants to do the algo again
       self.ui.cb_keepMarkers.enabled = True; 
     except Exception as e:
@@ -441,7 +422,7 @@ class CTLungMaskGeneratorLogic(ScriptedLoadableModuleLogic):
 
     return (int(displayCoords[0]), int(displayCoords[1]))
 
-  def process(self, inputVolume, minThreshold, maxThreshold, show3D_cb, showResult=True):
+  def process(self, inputVolume, minThreshold, maxThreshold, show3D_cb=True, showResult=True):
     """
     Run the processing algorithm.
     Can be used without GUI widget.
@@ -463,14 +444,18 @@ class CTLungMaskGeneratorLogic(ScriptedLoadableModuleLogic):
 
 
     # Compute 
-    masterVolumeNode = inputVolume
+    # Resample the volume to 0.25mm spacing
+    logging.info('Resampling volume, please wait ... ')
+    resampledVolume = slicer.mrmlScene.AddNewNodeByClass("vtkMRMLScalarVolumeNode", "Resampled Volume")
+    parameters = {"outputPixelSpacing":"2.0,2.0,2.0", "InputVolume":inputVolume,"interpolationType":'linear',"OutputVolume":resampledVolume}
+    slicer.cli.runSync(slicer.modules.resamplescalarvolume, None, parameters)
+    masterVolumeNode = resampledVolume
     
     #fidList = slicer.util.getNode('F')
 
-    fidListRightLung = slicer.util.getNode('_markerRightLung')
-    fidListLeftLung = slicer.util.getNode('_markerLeftLung')
-    fidListTrachea = slicer.util.getNode('_markerUpperTrachea')
-    fidListBifurcation = slicer.util.getNode('_markerBifurcation')
+    fidListRightLung = slicer.util.getNode('_markerRL')
+    fidListLeftLung = slicer.util.getNode('_markerLL')
+    fidListTrachea = slicer.util.getNode('_markerT')
     #numFids = fidList.GetNumberOfFiducials()
     #for i in range(numFids):
     #    ras = [0,0,0]
@@ -565,124 +550,125 @@ class CTLungMaskGeneratorLogic(ScriptedLoadableModuleLogic):
     #if not segmentEditorWidget.effectByName("Wrap Solidify"):
     #    slicer.util.errorDisplay("Please install 'SurfaceWrapSolidify' extension using Extension Manager.")
 
-    # Create segments by thresholding
-    logging.info('Create lung segments by thresholding ... ')
-    segmentsFromHounsfieldUnits = [
-        ["Right lung mask", min, maxThreshold],
-        ["Left lung mask", min, maxThreshold]]
-    for segmentName, thresholdMin, thresholdMax in segmentsFromHounsfieldUnits:
-        # Create segment
-        addedSegmentID = segmentationNode.GetSegmentation().AddEmptySegment(segmentName)
-        segmentEditorNode.SetSelectedSegmentID(addedSegmentID)
-        # Fill by thresholding
-        segmentEditorWidget.setActiveEffectByName("Threshold")
-        effect = segmentEditorWidget.activeEffect()
-        effect.setParameter("MinimumThreshold",str(thresholdMin))
-        effect.setParameter("MaximumThreshold",str(thresholdMax))
-        segmentEditorNode.SetOverwriteMode(2) # allow overlap
-        effect.self().onApply()
-        # Cut upper trachea
-        ras = [0,0,0]
-        fidListTrachea.GetNthFiducialPosition(0,ras)
-        segmentEditorWidget.setActiveEffectByName("Surface cut")
-        effect = segmentEditorWidget.activeEffect()
-        effect.self().fiducialPlacementToggle.placeButton().click()
-        rightleftoffset = 15.
-        antpostoffset = 15.
-        supinfoffset = 15.
-        points =[
-             [ras[0]+rightleftoffset, ras[1]-antpostoffset, ras[2]-supinfoffset], [ras[0]-rightleftoffset, ras[1]-antpostoffset, ras[2]-supinfoffset],
-             [ras[0]-rightleftoffset, ras[1]+antpostoffset, ras[2]-supinfoffset], [ras[0]+rightleftoffset, ras[1]+antpostoffset, ras[2]-supinfoffset],
-             [ras[0]+rightleftoffset, ras[1]-antpostoffset, ras[2]+supinfoffset], [ras[0]-rightleftoffset, ras[1]-antpostoffset, ras[2]+supinfoffset],
-             [ras[0]-rightleftoffset, ras[1]+antpostoffset, ras[2]+supinfoffset], [ras[0]+rightleftoffset, ras[1]+antpostoffset, ras[2]+supinfoffset]
-             ]
-        for p in points:
-            effect.self().segmentMarkupNode.AddFiducialFromArray(p)
-        effect.setParameter("Operation","ERASE_INSIDE")
-        effect.self().onApply()
-        # Cut left main bronchus
-        ras = [0,0,0]
-        fidListBifurcation.GetNthFiducialPosition(0,ras)
-        segmentEditorWidget.setActiveEffectByName("Surface cut")
-        effect = segmentEditorWidget.activeEffect()
-        effect.self().fiducialPlacementToggle.placeButton().click()
-        cubesize=15.
-        points =[
-             [ras[0]+cubesize, ras[1]-cubesize, ras[2]-cubesize], [ras[0]-cubesize, ras[1]-cubesize, ras[2]-cubesize],
-             [ras[0]-cubesize, ras[1]+cubesize, ras[2]-cubesize], [ras[0]+cubesize, ras[1]+cubesize, ras[2]-cubesize],
-             [ras[0]+cubesize, ras[1]-cubesize, ras[2]+cubesize], [ras[0]-cubesize, ras[1]-cubesize, ras[2]+cubesize],
-             [ras[0]-cubesize, ras[1]+cubesize, ras[2]+cubesize], [ras[0]+cubesize, ras[1]+cubesize, ras[2]+cubesize]
-             ]
-        for p in points:
-            effect.self().segmentMarkupNode.AddFiducialFromArray(p)
-        effect.setParameter("Operation","ERASE_INSIDE")
-        effect.self().onApply()
-        # Cut lungs into halves
- 
-        #ras2 = [0,0,0]
-        #fidList.GetNthFiducialPosition(4,ras2)
-        #ras3 = [0,0,0]
-        #fidList.GetNthFiducialPosition(5,ras3)
-        #ras4 = [0,0,0]
-        #fidList.GetNthFiducialPosition(6,ras4)
-        #ras5 = [0,0,0]
 
-        #fidList.GetNthFiducialPosition(7,ras5)
-        ras = [0,0,0]
-        lat_offs = 0.
-        ant_offs = 0.
-        sup_offs = 0.
-        lat_size = 1.
-        ant_size = 150.
-        sup_size = 150.
-        fidListBifurcation.GetNthFiducialPosition(0,ras)
-        segmentEditorWidget.setActiveEffectByName("Surface cut")
+    
+    # Create segments by thresholding
+    logging.info('Create lung segments  ... ')
+    
+    # Create segment
+    segmentEditorNode.SetMasterVolumeIntensityMask(True)
+    segmentEditorNode.SetMasterVolumeIntensityMaskRange(min, maxThreshold)
+    #addedSegmentID = segmentationNode.GetSegmentation().AddEmptySegment(segmentName)
+    #segmentEditorNode.SetSelectedSegmentID(addedSegmentID)
+    
+    logging.info('Creating seeds ... ')
+    # Create right lung seed segment 
+    append = vtk.vtkAppendPolyData()
+    numFids = fidListRightLung.GetNumberOfFiducials()
+    for i in range(numFids):
+      ras = [0,0,0]
+      fidListRightLung.GetNthFiducialPosition(i,ras)
+      rightlungSeed = vtk.vtkSphereSource()
+      rightlungSeed.SetCenter(ras)
+      rightlungSeed.SetRadius(10)
+      rightlungSeed.Update()
+      append.AddInputData(rightlungSeed.GetOutput())
+
+    append.Update()
+    color = (128, 174, 128)
+    color = np.array(color, float) / 255
+    rightLungSegmentId = segmentationNode.AddSegmentFromClosedSurfaceRepresentation(append.GetOutput(), "Right lung mask", color)
+    
+    # Create left lung seed segment 
+    append = vtk.vtkAppendPolyData()
+    numFids = fidListLeftLung.GetNumberOfFiducials()
+    for i in range(numFids):
+      ras = [0,0,0]
+      fidListLeftLung.GetNthFiducialPosition(i,ras)
+      leftlungSeed = vtk.vtkSphereSource()
+      leftlungSeed.SetCenter(ras)
+      leftlungSeed.SetRadius(10)
+      leftlungSeed.Update()
+      append.AddInputData(leftlungSeed.GetOutput())
+
+    append.Update()
+    color = (241, 214, 145)
+    color = np.array(color, float) / 255
+    leftLungSegmentId = segmentationNode.AddSegmentFromClosedSurfaceRepresentation(append.GetOutput(), "Left lung mask", color)
+
+    # Create trachea seed segment 
+    append = vtk.vtkAppendPolyData()
+    numFids = fidListTrachea.GetNumberOfFiducials()
+    for i in range(numFids):
+      ras = [0,0,0]
+      fidListTrachea.GetNthFiducialPosition(i,ras)
+      tracheaSeed = vtk.vtkSphereSource()
+      tracheaSeed.SetCenter(ras)
+      tracheaSeed.SetRadius(2)
+      tracheaSeed.Update()
+      append.AddInputData(tracheaSeed.GetOutput())
+
+    append.Update()
+    color = (182, 228,255)
+    color = np.array(color, float) / 255
+    tracheaSegmentId = segmentationNode.AddSegmentFromClosedSurfaceRepresentation(append.GetOutput(), "Trachea mask", color)
+    
+    # Run segmentation
+    logging.info('Run growing from seeds segmentation ... ')
+    segmentEditorWidget.setActiveEffectByName("Grow from seeds")
+    effect = segmentEditorWidget.activeEffect()
+    effect.self().onPreview()
+    effect.self().onApply()
+    
+    segmentEditorNode.SetSelectedSegmentID("Right lung mask")
+
+    segmentEditorNode.SetMasterVolumeIntensityMask(False)
+    #otherwise vessels do not fill
+
+    #close holes
+    logging.info('Closing holes in segmentations ... ')
+    do_smooth = True
+    if do_smooth: 
+        segmentEditorWidget.setActiveEffectByName("Smoothing")
         effect = segmentEditorWidget.activeEffect()
-        effect.self().fiducialPlacementToggle.placeButton().click()
-        ras[0] = ras[0] + lat_offs
-        ras[1] = ras[1] + ant_offs
-        ras[2] = ras[2] + sup_offs
-        rightleftoffset = lat_size
-        antpostoffset = ant_size
-        supinfoffset = sup_size
-        points =[
-             [ras[0]+rightleftoffset, ras[1]-antpostoffset, ras[2]-supinfoffset], [ras[0]-rightleftoffset, ras[1]-antpostoffset, ras[2]-supinfoffset],
-             [ras[0]-rightleftoffset, ras[1]+antpostoffset, ras[2]-supinfoffset], [ras[0]+rightleftoffset, ras[1]+antpostoffset, ras[2]-supinfoffset],
-             [ras[0]+rightleftoffset, ras[1]-antpostoffset, ras[2]+supinfoffset], [ras[0]-rightleftoffset, ras[1]-antpostoffset, ras[2]+supinfoffset],
-             [ras[0]-rightleftoffset, ras[1]+antpostoffset, ras[2]+supinfoffset], [ras[0]+rightleftoffset, ras[1]+antpostoffset, ras[2]+supinfoffset]
-             ]
-        for p in points:
-            effect.self().segmentMarkupNode.AddFiducialFromArray(p)           
-        effect.setParameter("Operation","ERASE_INSIDE")
-        #effect.setParameter("SmoothModel","1")
+        effect.setParameter("SmoothingMethod","MORPHOLOGICAL_CLOSING")
+        effect.setParameter("KernelSizeMm","12")
         effect.self().onApply()
-        
-        #close holes
-        do_smooth = True
-        if do_smooth: 
-            segmentEditorWidget.setActiveEffectByName("Smoothing")
-            effect = segmentEditorWidget.activeEffect()
-            effect.setParameter("SmoothingMethod","MORPHOLOGICAL_CLOSING")
-            effect.setParameter("KernelSizeMm","4")
-            effect.self().onApply()
-        # mask lung
-        do_islands = True
-        if do_islands: 
-            if segmentName == "Right lung mask": 
-                segmentEditorWidget.setActiveEffectByName("Islands")
-                effect = segmentEditorWidget.activeEffect()
-                effect.setParameter("Operation","KEEP_SELECTED_ISLAND")
-                ras = [0,0,0]
-                fidListRightLung.GetNthFiducialPosition(0,ras)
-                slicer.util.clickAndDrag(sliceWidget, start=self.rasToDisplay(ras[0],ras[1],ras[2]), end=self.rasToDisplay(ras[0],ras[1],ras[2]), steps=1,modifiers=[])
-            if segmentName == "Left lung mask": 
-                segmentEditorWidget.setActiveEffectByName("Islands")
-                effect = segmentEditorWidget.activeEffect()
-                effect.setParameter("Operation","KEEP_SELECTED_ISLAND")
-                ras = [0,0,0]
-                fidListLeftLung.GetNthFiducialPosition(0,ras)
-                slicer.util.clickAndDrag(sliceWidget, start=self.rasToDisplay(ras[0],ras[1],ras[2]), end=self.rasToDisplay(ras[0],ras[1],ras[2]), steps=1,modifiers=[])
+    #close holes
+    logging.info('Smoothing external surface ... ')
+    do_smooth = True
+    if do_smooth: 
+        segmentEditorWidget.setActiveEffectByName("Smoothing")
+        effect = segmentEditorWidget.activeEffect()
+        effect.setParameter("SmoothingMethod","GAUSSIAN")
+        effect.setParameter("KernelSizeMm","2")
+        effect.self().onApply()
+
             
+    segmentEditorNode.SetSelectedSegmentID("Left lung mask")
+
+    segmentEditorNode.SetMasterVolumeIntensityMask(False)
+    #otherwise vessels do not fill
+
+    #close holes
+    logging.info('Closing holes in segmentations ... ')
+    do_smooth = True
+    if do_smooth: 
+        segmentEditorWidget.setActiveEffectByName("Smoothing")
+        effect = segmentEditorWidget.activeEffect()
+        effect.setParameter("SmoothingMethod","MORPHOLOGICAL_CLOSING")
+        effect.setParameter("KernelSizeMm","12")
+        effect.self().onApply()
+    #close holes
+    logging.info('Smoothing external surface ... ')
+    do_smooth = True
+    if do_smooth: 
+        segmentEditorWidget.setActiveEffectByName("Smoothing")
+        effect = segmentEditorWidget.activeEffect()
+        effect.setParameter("SmoothingMethod","GAUSSIAN")
+        effect.setParameter("KernelSizeMm","2")
+        effect.self().onApply()
+
 #self.takeScreenshot('Lung CT Mask Generator','Left lung mask')
 #print(slicer.mrmlScene.GetFirstNodeByClass("vtkMRMLSegmentEditorNode"))
 
@@ -690,6 +676,10 @@ class CTLungMaskGeneratorLogic(ScriptedLoadableModuleLogic):
     logging.info('Deleting temporary segment editor ... ')
     segmentEditorWidget = None
     slicer.mrmlScene.RemoveNode(segmentEditorNode)    
+
+    # Delete resampled Volume 
+    logging.info('Deleting resampled volume node ... ')
+    slicer.mrmlScene.RemoveNode(resampledVolume)
 
     # Delete existing model storage nodes so that they will be recreated with default settings
     logging.info('Delete table nodes ... ')
@@ -728,8 +718,6 @@ class CTLungMaskGeneratorLogic(ScriptedLoadableModuleLogic):
         segmentationNode.CreateClosedSurfaceRepresentation()
 
     # clear up
-    slicer.mrmlScene.RemoveNode(slicer.mrmlScene.GetFirstNodeByName('SegmentEditorSurfaceCutModel'))
-    slicer.mrmlScene.RemoveNode(slicer.mrmlScene.GetFirstNodeByName('C'))
   
 
 #
