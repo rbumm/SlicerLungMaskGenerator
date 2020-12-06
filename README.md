@@ -42,6 +42,7 @@ Idea and realization:<br>
 Rudolf Bumm, Department of Surgery, Kantonsspital Graubünden (KSGR), Chur, Switzerland. <br>
 <a href="mailto:rudolf.bumm@ksgr.ch">Email</a>  <br>
 <br>
+Improvements: Andras Lasso (PERK)
 <br>
 The code presented here is distributed under the Apache license (https://www.apache.org/licenses/LICENSE-2.0).<br>
 <br>
