@@ -1,5 +1,11 @@
 # 3D Slicer Lung Mask Generator
 <br>
+This is an outdated project. Go
+https://github.com/rbumm/SlicerLungCTAnalyzer
+for a package including the next development step with an excellent interactive lung mask segmenter. 
+<br>
+<br>
+<br>
 This extension enables the easy and quick production of three frequently used masks from lung CT scans: A "Right Lung Mask", a "Left Lung Mask" and a "Trachea mask".
 This procedure is realized (semiautomatically) with 3D Slicer (1). 
 <br>
